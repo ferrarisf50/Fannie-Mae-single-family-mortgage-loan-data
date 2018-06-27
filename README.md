@@ -2,7 +2,7 @@
 
 ## Introduction
 
-According to Wikipedia, "The Federal National Mortgage Association (FNMA), commonly known as Fannie Mae, is a United States government-sponsored enterprise (GSE) and, since 1968, a publicly traded company. Founded in 1938 during the Great Depression as part of the New Deal," Fannie Mae buys loans from mortgage lenders, packages them and sells them as mortgage-backed security to investors on the open market. The corporation's purpose is to expand the secondary mortgage market by securitizing mortgages in the form of mortgage-backed securities (MBS), allowing lenders to reinvest their assets into more lending and in effect increasing the number of lenders in the mortgage market by reducing the reliance on locally based savings and loan associations." 
+According to Wikipedia, "The Federal National Mortgage Association (FNMA), commonly known as Fannie Mae, is a United States government-sponsored enterprise (GSE) and, since 1968, a publicly traded company. Founded in 1938 during the Great Depression as part of the New Deal, the corporation's purpose is to expand the secondary mortgage market by securitizing mortgages in the form of mortgage-backed securities (MBS), allowing lenders to reinvest their assets into more lending and in effect increasing the number of lenders in the mortgage market by reducing the reliance on locally based savings and loan associations." Fannie Mae provides quarterly based single family fixed rate mortgage dataset on its website. The data is grouped in acquisitions dataset and performance data 
 
 ## References
 
