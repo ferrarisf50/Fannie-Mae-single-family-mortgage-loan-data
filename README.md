@@ -10,4 +10,6 @@ According to Wikipedia, "The Federal National Mortgage Association (FNMA), commo
 
 https://en.wikipedia.org/wiki/Fannie_Mae
 
+http://www.fanniemae.com/portal/funding-the-market/data/loan-performance-data.html
 
+https://degravek.github.io/project-pages/project1/2016/11/12/New-Notebook/
