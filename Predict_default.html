@@ -11631,10 +11631,8 @@ ul.typeahead-list > li > a {
 .highlight .mh { color: #666666 } /* Literal.Number.Hex */
 .highlight .mi { color: #666666 } /* Literal.Number.Integer */
 .highlight .mo { color: #666666 } /* Literal.Number.Oct */
-.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
 .highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
 .highlight .sc { color: #BA2121 } /* Literal.String.Char */
-.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
 .highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 .highlight .s2 { color: #BA2121 } /* Literal.String.Double */
 .highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
@@ -11645,11 +11643,9 @@ ul.typeahead-list > li > a {
 .highlight .s1 { color: #BA2121 } /* Literal.String.Single */
 .highlight .ss { color: #19177C } /* Literal.String.Symbol */
 .highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
-.highlight .fm { color: #0000FF } /* Name.Function.Magic */
 .highlight .vc { color: #19177C } /* Name.Variable.Class */
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
-.highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
     </style>
 <style type="text/css">
@@ -11764,7 +11760,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<center>Pengchong Tang  -Updated on 07/10/2018</center>
+<center>Pengchong Tang  - Last updated on 07/17/2018</center>
 </div>
 </div>
 </div>
@@ -25377,7 +25373,7 @@ AAAAAECH4BgAAAAAgA7BMQAAAAAAHYJjAAAAAAA6/j+2Y0bWGclxXQAAAABJRU5ErkJggg==
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we define the XGBClassifier with 1000 trees and an early stopping module to prevent the model from overfitting. The early stopping module predicts the validation set, use the metric Area Under the Precision-Recall Curve (AUPRC) to evaluate the model performance. If the validation set error is not improved for 5 iteration, the iteration process will be stopped. AUPRC is one of the metrics that fits for unbalanced classes as we see the default is a minor class. Also, the scale_pos_weight attribute in XGBOOST is for balancing each class, we should set an appropiate positive number to increase the weight of the minor class.</p>
+<p>Now we define the XGBClassifier with 1000 trees and an early stopping module to prevent the model from overfitting. The early stopping module predicts the validation set, uses the metric Area Under the Precision-Recall Curve (AUPRC) to evaluate the model performance. If the validation set error is not improved for 5 iteration, the iteration process will be stopped. AUPRC is one of the metrics used for anomaly detection, which is more sensitive to the small difference of a minor class. Also, the scale_pos_weight attribute in XGBOOST is for balancing each class, we should set an appropiate positive number to increase the weight of the minor class.</p>
 
 </div>
 </div>
@@ -25570,7 +25566,7 @@ Stopping. Best iteration:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We can print the confusion matrix and the report to see the model performance on predicting the validation dataset.</p>
+<p>We've fitted the model with training set. Now we can print the confusion matrix and the report to see the model performance on predicting the validation dataset.</p>
 
 </div>
 </div>
@@ -25623,6 +25619,7 @@ Accuracy:
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The confusion matrix shows that the model is able to find out 3271 of 6178 defaulted loan from the validation dataset, which means 52% of the defaulted loans are found. There are 2971 defaulted loans being ignored, so the recall is 0.52. However, the model also incorrectly classifies 6640 loans as default, the precision of default is only 0.33.</p>
 <p>The report also shows the model achieves an 86% prediction accuracy. But due to unbalanced classes, the accuracy is not important to evaluate the model, as we know, a dummy model classifying all loans as healthy loan can achieve a 91.3% accuracy.</p>
+<p>Let's take a look the AUPRC figure.</p>
 
 </div>
 </div>
@@ -25633,9 +25630,9 @@ Accuracy:
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">precision_recall_curve</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">average_precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predict</span><span class="p">)</span>
+<span class="n">auprc</span> <span class="o">=</span> <span class="n">average_precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predict</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;AUPRC = </span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">roc_auc</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;AUPRC = </span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">auprc</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;--k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Recall&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Precision&#39;</span><span class="p">)</span>
@@ -26002,6 +25999,17 @@ nBMQMzMzq5wTEDMzM6ucExAzMzOrnBMQMzMzq5wTEDMzM6ucExAzMzOrnBMQMzMzq5wTEDMzM6vc
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The AUPRC value is only 0.21, which tells model has a poor performance on distinguishing the default.</p>
+<p>Some articles use the area under the ROC curve as the metric, but I don't suggest that because the goal is to identify the default while the model also have a high accuracy prediction on the healthy loans, the area under the ROC curve will average the performance on both classes, so we will see the score below, a score 0.71 for this model, which can be regarded as a fair classifier.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -26430,6 +26438,17 @@ exQGquNwAAAAAElFTkSuQmCC
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The area under the ROC curve is 0.71. It looks like the model is not so bad, a fair classifier that at least is able to find out most healthy loan, but it does not show how poorly it detects the default.</p>
+<p>Finally we check the feature importance from XGBOOST.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -27369,7 +27388,27 @@ xAwqWbOaogAAAABJRU5ErkJggg==
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see the top features, the house value, credit score, location and loan-to-value are the important features.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="5.3-Predtiction-on-2007Q4">5.3 Predtiction on 2007Q4<a class="anchor-link" href="#5.3-Predtiction-on-2007Q4">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's use the model the predict the 2007Q4 data. I've prepared for the a pre-cleaned Combined_Data set similar to 2007Q3. Now we just need to read the pre-cleaned data set.</p>
+
 </div>
 </div>
 </div>
@@ -27385,6 +27424,16 @@ xAwqWbOaogAAAABJRU5ErkJggg==
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Check how many defaulted and healthy loans in 2007Q4.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -27416,6 +27465,16 @@ Name: Default, dtype: int64</pre>
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The defaulted loans account for 10.4%, a small increase from the third quarter. Now we predict this data and check the results.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -27899,9 +27958,9 @@ D2W7AAAAAElFTkSuQmCC
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">precision_recall_curve</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">average_precision_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">predict</span><span class="p">)</span>
+<span class="n">auprc</span> <span class="o">=</span> <span class="n">average_precision_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">predict</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;AUPRC = </span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">roc_auc</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;AUPRC = </span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">auprc</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;--k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Recall&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Precision&#39;</span><span class="p">)</span>
@@ -28278,7 +28337,27 @@ v8QAAAAASUVORK5CYII=
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>Looking into those results, the prediction achieves 0.29 presicion and 0.69 recall, quite similar score compared to the validation set. We can conclude this is a robust model carried into the test data set.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="6.-Conclusion">6. Conclusion<a class="anchor-link" href="#6.-Conclusion">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this project, we've implemented a machine learning model to predict the defaulted loans across quarter. The model gave us excellent prediction on the healthy loans, however, its performance on finding the defaulted loans is not good enough as I expected. The default precision and recall scores are around or below 0.5, many misclassifications occur on the boundry between the defaulted and the healthy. The result seems to indicate a pattern that we can narrow down a portion of highly risky loans by using the machine learning algorithm, whose final loan status randomly become defaulted but we currently don't know what factor causes them defaulted. We may need to include more data and expand our analysis on more external factors besides the data set available on Fannie Mae's website, for example, we could download more data from Fannie Mae's website, we can explore some economic factors such as local unemployment rate, or gather more backgrounds about the loans. Moreover, we can improve the XGBOOST model by tuning the parameters, although the improvement may not be significant than finding an important feature. Some articles indicate the unpredictable exogenous shocks have great impact on the economy, making environment data reshaped but the model fail to detect the changes of outside climate as well as hard to make an accurate prediction.</p>
+
 </div>
 </div>
 </div>
